@@ -1,27 +1,27 @@
 # CEC Monitoring over HDMI for Raspberry Pi
-This script can monitor a TV using the HDMI port of a Raspberry PI and toggle SmartThings devices when the TV turns on.
+This script can monitor a TV using an HDMI connection  and toggle SmartThings devices when the TV turns on.
 
-I have successfully used this script on Raspian Stretch lite.
+I have tested this script with the Raspian Stretch lite distro.
 
 ## Installation
-This script requires a few prerequisite python packages AND system pakages to run properly
+This script requires a few prerequisite python packages AND system packages to run properly.
 
 ### System Packages
 cec-utils must be installed before the python-cec library will function.
 
 ### Python Packages
-This script uses python3. Depending on how you have your python envioronment configured you will either need to uses pip3 install, or whatever package manager program is appropriate to your configuration, to pull the packages listed in thr requirements.rxt file.
+This script uses python3. Depending on how you have your python environment configured you will either need to uses pip3 install, or whatever command is appropriate to your environment configuration, to pull the packages listed in the requirements.rxt file.
 
 ```
-pip3 install requirements.txt
+pip3 install -r requirements.txt
 ```
 
-see https://github.com/trainman419/python-cec for details about python-cec for rpi.
+see https://github.com/trainman419/python-cec for more details about python-cec for rpi.
 
 ### Configuring the script
-Copy the config_template.py file and create a new copy of the file called config.py in the same forlder as the HDMI CEC monitr script. Edit the file in a text editor such as nano and replace the parameters as follows:
+Copy the config_template.py file and create a new copy of the file called config.py in the same folder as the HDMI CEC monitor script. Edit the file in a text editor such as nano and replace the parameters as follows:
 
-Smarththings token can be generated using [this link](https://account.smartthings.com/tokens) be sure the token can read and execute commands for devices. 
+SmartThings tokens can be generated using [this link](https://account.smartthings.com/tokens) be sure the token can read and execute commands for devices. 
 
 The Device IDs can be found in the [SmartThings Developer portal](https://developers.smartthings.com/) Navigate to the list of devices and drill down to the device you would like to control (must be a light). You can obtain the device ID from the URL of the device (URL looks like ....api.smartthings.com/device/show/{device_id}
 
@@ -34,7 +34,7 @@ Enter the following:
 
 ```
  [Unit]
- Description=tv and light controll
+ Description=tv and light control
  After=multi-user.target
 
  [Service]
@@ -45,15 +45,24 @@ Enter the following:
  [Install]
  WantedBy=multi-user.target
 ```
+Then run:
+
+```
+sudo systemctl daemon-reload
+```
+```
+sudo systemctl start tv_cec.service
+```
+
 
 ## Troubleshooting
 **Powering the PI:**
 
-I found that I was unable to rely on the USB port of my TV to provide sufficent power to the USB port to power my PIi The Pi worked fine while the TV was on but would reboot intermittently when the TB was in standby. This was fixed by using an external AC wall charger for the Pi.
+I found that I was unable to rely on the 800ma rated USB port of my Sony 2017 model TV to provide sufficient power to the USB port to power my Pi zero W. The Pi worked fine while the TV was on but would reboot intermittently when the TV was in standby. This was fixed by using an external AC wall charger for the Pi.
 
 **HDMI CEC causing TV input switching or pi rebooting:**
 
-It was neccessary to add the following line to the botton of the file **/boot/config.txt**
+It was necessary to add the following line to the bottom of the file **/boot/config.txt**
 ```
 hdmi_ignore_cec_init=1
 ```
