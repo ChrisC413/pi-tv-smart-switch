@@ -5,6 +5,10 @@ import asyncio
 import cec
 import logging
 import config
+import os
+
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+logging.info("starting hdmi monitor")
 
 smart_things_token = config.smart_things_token
 cec.init()
@@ -33,8 +37,6 @@ def get_tv_state():
 def check_state():
     global tv_state
     new_tv_state = get_tv_state()
-    print("tv state:", tv_state)
-    print("new tv state:", new_tv_state)
     if new_tv_state != tv_state:
         tv_state = new_tv_state
         if new_tv_state:

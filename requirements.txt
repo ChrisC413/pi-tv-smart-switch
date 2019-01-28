@@ -1,0 +1,3 @@
+aiohttp==3.5.4
+cec==0.2.6
+pysmartthings==0.4.2
