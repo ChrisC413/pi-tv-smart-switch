@@ -42,8 +42,6 @@ def check_state():
         if new_tv_state:
             loop.run_until_complete(turn_off_light())
 
-    schedule.enter(5, 1, check_state)
-
 
 loop = asyncio.get_event_loop()
 try:
@@ -51,5 +49,6 @@ try:
 except Exception as err:
     logging.warning("Failure checking state of CEC: " + err)
 finally:
+    schedule.enter(5, 1, check_state)
     schedule.run()
     loop.close()
