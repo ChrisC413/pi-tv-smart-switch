@@ -35,20 +35,20 @@ def get_tv_state():
 
 
 def check_state():
-    global tv_state
-    new_tv_state = get_tv_state()
-    if new_tv_state != tv_state:
-        tv_state = new_tv_state
-        if new_tv_state:
-            loop.run_until_complete(turn_off_light())
+    try:
+        global tv_state
+        new_tv_state = get_tv_state()
+        if new_tv_state != tv_state:
+            tv_state = new_tv_state
+            if new_tv_state:
+                loop.run_until_complete(turn_off_light())
+    except Exception as err:
+        logging.warning("Failure checking state of CEC: " + err)
+    finally:
+        schedule.enter(5, 1, check_state)
 
 
 loop = asyncio.get_event_loop()
-try:
-    check_state()
-except Exception as err:
-    logging.warning("Failure checking state of CEC: " + err)
-finally:
-    schedule.enter(5, 1, check_state)
-    schedule.run()
-    loop.close()
+check_state()
+schedule.run()
+loop.close()
