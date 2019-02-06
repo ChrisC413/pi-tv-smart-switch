@@ -25,7 +25,7 @@ async def turn_off_light():
             result = await light.command("switch", "off")
             assert result
         except Exception as err:
-            logging.warning("Unable to toggle light: " + err)
+            logging.warning("Unable to toggle light: " + str(err))
 
 
 def get_tv_state():
@@ -43,7 +43,7 @@ def check_state():
             if new_tv_state:
                 loop.run_until_complete(turn_off_light())
     except Exception as err:
-        logging.warning("Failure checking state of CEC: " + err)
+        logging.warning("Failure checking state of CEC: " + str(err))
     finally:
         schedule.enter(5, 1, check_state)
 
